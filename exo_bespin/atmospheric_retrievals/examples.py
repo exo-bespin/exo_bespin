@@ -1,7 +1,7 @@
 #! /usr/bin/env python
 
 """This module provides examples of how to use the ``platon_wrapper``
-module in ExoCTK's ``atmopsheric_retrieval`` subpackage.  Each example
+module in exo_bespin's ``atmopsheric_retrieval`` subpackage.  Each example
 can be run using either the ``multinest`` method or the ``emcee``
 method.  See the docstring of each example function for further
 details.
@@ -36,7 +36,7 @@ Dependencies
 
     Dependent libraries include:
 
-    - ``exoctk``
+    - ``exo_bespin``
     - ``numpy``
     - ``pandas``
     - ``platon``
@@ -78,8 +78,8 @@ import numpy as np
 import pandas
 from platon.constants import R_sun, R_jup, M_jup
 
-from exoctk.atmospheric_retrievals.aws_tools import get_config
-from exoctk.atmospheric_retrievals.platon_wrapper import PlatonWrapper
+from exo_bespin.atmospheric_retrievals.aws_tools import get_config
+from exo_bespin.atmospheric_retrievals.platon_wrapper import PlatonWrapper
 
 
 def example(method):

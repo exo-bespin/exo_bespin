@@ -20,12 +20,12 @@ Use
     more examples of how to use this software, including ways to use
     AWS for performing computations, see the ``examples.py`` module,
     or the ``atmospheric_retrievals_demo.ipynb`` notebook under the
-    ``exoctk/notebooks/`` directory.
+    ``exo_bespin/notebooks/`` directory.
     ::
 
         import numpy as np
         from platon.constants import R_sun, R_jup, M_jup
-        from exoctk.atmospheric_retrievals.platon_wrapper import PlatonWrapper
+        from exo_bespin.atmospheric_retrievals.platon_wrapper import PlatonWrapper
 
         # Build dictionary of parameters you wish to fit
         params = {
@@ -77,7 +77,7 @@ Dependencies
 ------------
 
     - ``corner``
-    - ``exoctk``
+    - ``exo_bespin``
     - ``matplotlib``
     - ``platon``
 """
@@ -97,12 +97,12 @@ import matplotlib
 from platon.retriever import Retriever
 from platon.constants import R_sun, R_jup, M_jup
 
-from exoctk.atmospheric_retrievals.aws_tools import build_environment
-from exoctk.atmospheric_retrievals.aws_tools import log_output
-from exoctk.atmospheric_retrievals.aws_tools import start_ec2
-from exoctk.atmospheric_retrievals.aws_tools import stop_ec2
-from exoctk.atmospheric_retrievals.aws_tools import transfer_from_ec2
-from exoctk.atmospheric_retrievals.aws_tools import transfer_to_ec2
+from exo_bespin.atmospheric_retrievals.aws_tools import build_environment
+from exo_bespin.atmospheric_retrievals.aws_tools import log_output
+from exo_bespin.atmospheric_retrievals.aws_tools import start_ec2
+from exo_bespin.atmospheric_retrievals.aws_tools import stop_ec2
+from exo_bespin.atmospheric_retrievals.aws_tools import transfer_from_ec2
+from exo_bespin.atmospheric_retrievals.aws_tools import transfer_to_ec2
 
 
 def _apply_factors(params):
@@ -297,7 +297,7 @@ class PlatonWrapper():
             transfer_to_ec2(instance, key, client, 'pw.obj')
 
             # Connect to the EC2 instance and run commands
-            command = './exoctk/exoctk/atmospheric_retrievals/exoctk-env-init.sh python exoctk/exoctk/atmospheric_retrievals/platon_wrapper.py {}'.format(self.method)
+            command = './exo_bespin/exo_bespin/atmospheric_retrievals/exo_bespin-env-init.sh python exo_bespin/exo_bespin/atmospheric_retrievals/platon_wrapper.py {}'.format(self.method)
             client.connect(hostname=instance.public_dns_name, username='ec2-user', pkey=key)
             stdin, stdout, stderr = client.exec_command(command)
             output = stdout.read()
