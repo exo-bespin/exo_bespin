@@ -21,24 +21,14 @@ source ~/.bashrc
 conda activate exo-bespin
 
 echo ''
-echo '~~~~~ INSTALLING exoctk ~~~~~'
+echo '~~~~~ INSTALLING exo_bespin ~~~~~'
 echo ''
 git clone https://github.com/exo-bespin/exo_bespin.git
 cd exo_bespin/
-conda env update -f env/exo-bespin
+conda env update -f env/environment.yml
 conda init bash
 source ~/.bashrc
 conda activate exo-bespin
-python setup.py develop
-cd ../
-
-echo ''
-echo '~~~~~ INSTALLING jwst_gtvt ~~~~~'
-echo ''
-rm -fr /home/ec2-user/miniconda3/envs/exo-bespin/lib/python3.7/site-packages/jwst_gtvt
-git clone https://github.com/spacetelescope/jwst_gtvt.git
-cd jwst_gtvt
-git checkout cd6bc76f66f478eafbcc71834d3e735c73e03ed5
 python setup.py develop
 cd ../
 

@@ -36,35 +36,24 @@ echo ''
 echo '~~~~~ SETTING ENVIRONMENT VARIABLES ~~~~~'
 echo ''
 export PATH=/home/ec2-user/miniconda3/bin:$PATH
-export EXOCTK_DATA=''
 
 echo ''
 echo '~~~~~ CREATING base CONDA ENVIRONMENT ~~~~~'
 echo ''
-conda create --yes -n exoctk-3.6 python=3.6 git numpy flask pytest
+conda create --yes -n exo-bespin python=3.7 git numpy flask pytest
 conda init bash
 source ~/.bashrc
-conda activate exoctk-3.6
+conda activate exo-bespin
 
 echo ''
-echo '~~~~~ INSTALLING exoctk ~~~~~'
+echo '~~~~~ INSTALLING exo_bespin ~~~~~'
 echo ''
-git clone https://github.com/ExoCTK/exoctk.git
+git clone https://github.com/exo-bespin/exo_bespin.git
 cd exoctk/
-conda env update -f env/environment-3.6.yml
+conda env update -f env/environment.yml
 conda init bash
 source ~/.bashrc
-conda activate exoctk-3.6
-python setup.py develop
-cd ../
-
-echo ''
-echo '~~~~~ INSTALLING jwst_gtvt ~~~~~'
-echo ''
-rm -fr /home/ec2-user/miniconda3/envs/exoctk-3.6/lib/python3.6/site-packages/jwst_gtvt
-git clone https://github.com/spacetelescope/jwst_gtvt.git
-cd jwst_gtvt
-git checkout cd6bc76f66f478eafbcc71834d3e735c73e03ed5
+conda activate exo-bespin
 python setup.py develop
 cd ../
 
@@ -92,17 +81,6 @@ git clone https://github.com/ExoCTK/gnumpy3.git
 cd gnumpy3
 python setup.py develop
 cd ../
-
-echo ''
-echo '~~~~~ BUILDING EXOCTK_DATA DIRECTORY ~~~~~'
-echo ''
-mkdir exoctk_data/
-mkdir exoctk_data/exoctk_contam/
-mkdir exoctk_data/exoctk_log/
-mkdir exoctk_data/fortney/
-mkdir exoctk_data/generic/
-mkdir exoctk_data/groups_integrations/
-mkdir exoctk_data/modelgrid/
 
 echo ''
 echo '~~~~~ THE ENVIRONMENT BEING USED ~~~~~'
