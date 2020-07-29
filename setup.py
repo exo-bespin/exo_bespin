@@ -2,8 +2,11 @@
 import os
 from setuptools import setup, find_packages
 
-REQUIRES = ['numpy',
-            'platon']
+REQUIRES = ['boto3',
+            'numpy',
+            'paramiko',
+            'platon',
+            'scp']
 
 setup(name='exo_bespin',
       version='0.0.0',
