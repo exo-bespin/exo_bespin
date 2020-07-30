@@ -44,7 +44,7 @@ Next, one can create the ``exo-bespin`` ``conda`` environment via the ``environm
 
 ::
 
-  conda env create -f environment.yml
+  conda env create -n exo-bespin -f environment.yml
 
 
 Lastly, one can activate the newly-created environment with:

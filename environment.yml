@@ -10,4 +10,6 @@ dependencies:
   - python=3.7.7
   - scp=0.13.2
   - pip:
+    - awscli
+    - corner==2.1.0
     - platon==4.0
