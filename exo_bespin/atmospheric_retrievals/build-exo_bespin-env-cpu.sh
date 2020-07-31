@@ -25,7 +25,8 @@ echo '~~~~~ INSTALLING exo_bespin ~~~~~'
 echo ''
 git clone https://github.com/exo-bespin/exo_bespin.git
 cd exo_bespin/
-conda env update -f env/environment.yml
+git checkout -b add-aws-materials origin/add-aws-materials
+conda env update -f environment.yml
 conda init bash
 source ~/.bashrc
 conda activate exo-bespin
