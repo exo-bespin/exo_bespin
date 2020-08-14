@@ -1,3 +1,8 @@
 *.ipynb_checkpoints
 *.egg-info
 *logs/
+*.obj
+*multinest_*.png
+*multinest_*.dat
+*emcee_*.png
+*emcee_*.dat
