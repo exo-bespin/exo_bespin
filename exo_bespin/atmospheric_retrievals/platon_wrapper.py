@@ -97,12 +97,12 @@ import matplotlib
 from platon.retriever import Retriever
 from platon.constants import R_sun, R_jup, M_jup
 
-from exo_bespin.atmospheric_retrievals.aws_tools import build_environment
-from exo_bespin.atmospheric_retrievals.aws_tools import log_output
-from exo_bespin.atmospheric_retrievals.aws_tools import start_ec2
-from exo_bespin.atmospheric_retrievals.aws_tools import stop_ec2
-from exo_bespin.atmospheric_retrievals.aws_tools import transfer_from_ec2
-from exo_bespin.atmospheric_retrievals.aws_tools import transfer_to_ec2
+from exo_bespin.aws.aws_tools import build_environment
+from exo_bespin.aws.aws_tools import log_output
+from exo_bespin.aws.aws_tools import start_ec2
+from exo_bespin.aws.aws_tools import stop_ec2
+from exo_bespin.aws.aws_tools import transfer_from_ec2
+from exo_bespin.aws.aws_tools import transfer_to_ec2
 
 
 def _apply_factors(params):

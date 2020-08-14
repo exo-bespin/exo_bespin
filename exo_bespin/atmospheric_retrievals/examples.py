@@ -78,7 +78,7 @@ import numpy as np
 import pandas
 from platon.constants import R_sun, R_jup, M_jup
 
-from exo_bespin.atmospheric_retrievals.aws_tools import get_config
+from exo_bespin.aws.aws_tools import get_config
 from exo_bespin.atmospheric_retrievals.platon_wrapper import PlatonWrapper
 
 
