@@ -25,7 +25,7 @@ echo '~~~~~ INSTALLING exo_bespin ~~~~~'
 echo ''
 git clone https://github.com/exo-bespin/exo_bespin.git
 cd exo_bespin/
-git checkout -b develop origin/develop
+git checkout -b decouple-aws-from-retrievals origin/decouple-aws-from-retrievals
 conda env update -f environment.yml
 conda init bash
 source ~/.bashrc
