@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
-"""This module contains various functions for interacting with AWS for
-``exoctk`` atmospheric retrievals.
+"""This module contains various functions for interacting with AWS EC2
+instances
 
 Authors
 -------
@@ -14,7 +14,7 @@ Use
     This script is inteneded to be imported and used by other modules,
     for example:
 
-        from aws_tools import get_config
+        from exo_bespin.aws.aws_tools import get_config
         get_config()
 
 Dependencies
@@ -27,9 +27,8 @@ Dependencies
     - scp
 
     Users must also have a ``aws_config.json`` file present within the
-    ``atmospheric_retrievals`` subdirectory.  This file must be of
-    a valid JSON format and contain two key/value pairs,
-    ``ec2_id`` and ``ssh_file``, e.g.:
+    ``aws`` subdirectory.  This file must be of a valid JSON format and
+    contain two key/value pairs, ``ec2_id`` and ``ssh_file``, e.g.:
 
     {
     "ec2_id" : "lt-021de8b904bc2b728",
@@ -52,7 +51,7 @@ from scp import SCPClient
 
 
 def build_environment(instance, key, client):
-    """Builds an ``exoctk`` environment on the given AWS EC2 instance
+    """Builds an ``exo-bespin`` environment on the given AWS EC2 instance
 
     Parameters
     ----------
@@ -64,7 +63,7 @@ def build_environment(instance, key, client):
         A ``paramiko.client.SSHClient`` object.
     """
 
-    logging.info('Building ExoCTK environment')
+    logging.info('Building exo-bespin environment')
 
     # Connect to the EC2 instance and run commands
     connected = False
@@ -76,8 +75,8 @@ def build_environment(instance, key, client):
         try:
             client.connect(hostname=instance.public_dns_name, username='ec2-user', pkey=key)
             scp = SCPClient(client.get_transport())
-            scp.put('build-exoctk-env-cpu.sh', '~/build-exoctk-env-cpu.sh')
-            stdin, stdout, stderr = client.exec_command('chmod 700 build-exoctk-env-cpu.sh && ./build-exoctk-env-cpu.sh')
+            scp.put('build-exo_bespin-env-cpu.sh', '~/build-exo_bespin-env-cpu.sh')
+            stdin, stdout, stderr = client.exec_command('chmod 700 build-exo_bespin-env-cpu.sh && ./build-exo_bespin-env-cpu.sh')
             connected = True
         except:
             iterations += 1
@@ -134,7 +133,7 @@ def start_ec2(ssh_file, ec2_id):
     ----------
     ssh_file : str
         Relative path to SSH public key to be used by AWS (e.g.
-        ``~/.ssh/exoctk.pem``).
+        ``~/.ssh/exo_bespin.pem``).
     ec2_id : str
         The AWS EC2 template id (e.g. ``lt-021de8b904bc2b728``) or
         instance ID (e.g. ``i-0d0c8ca4ab324b260``).
