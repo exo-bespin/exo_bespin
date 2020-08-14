@@ -297,7 +297,7 @@ class PlatonWrapper():
             transfer_to_ec2(instance, key, client, 'pw.obj')
 
             # Connect to the EC2 instance and run commands
-            command = './exo_bespin/exo_bespin/atmospheric_retrievals/exo_bespin-env-init.sh python exo_bespin/exo_bespin/atmospheric_retrievals/platon_wrapper.py {}'.format(self.method)
+            command = './exo_bespin/exo_bespin/aws/exo_bespin-env-init.sh python exo_bespin/exo_bespin/atmospheric_retrievals/platon_wrapper.py {}'.format(self.method)
             client.connect(hostname=instance.public_dns_name, username='ec2-user', pkey=key)
             stdin, stdout, stderr = client.exec_command(command)
             output = stdout.read()
