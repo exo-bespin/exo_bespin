@@ -49,4 +49,8 @@ echo '~~~~~ THE ENVIRONMENT BEING USED ~~~~~'
 echo ''
 conda env export
 
+echo ''
+echo '~~~~~ SETTING PERMISSIONS AND COPYING INIT OUTPUT ~~~~~'
+echo ''
+chmod -R 777 /home/ec2-user/miniconda3/envs/exo-bespin/
 cp /var/log/cloud-init-output.log /home/ec2-user/
