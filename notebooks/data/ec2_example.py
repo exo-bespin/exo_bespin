@@ -6,6 +6,5 @@ if __name__ == '__main__':
     print(data)
 
     # Save some results
-    my_favorite_foods = ['Cheese', 'Avocados', 'Asparagus', 'Other types of Cheese']
-    with open('resuts.dat', 'w') as f:
-        f.write(my_favorite_foods)
+    with open('results.dat', 'w') as f:
+        f.write('These are my results!')
