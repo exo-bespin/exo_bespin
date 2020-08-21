@@ -25,7 +25,7 @@ echo '~~~~~ INSTALLING exo_bespin ~~~~~'
 echo ''
 git clone https://github.com/exo-bespin/exo_bespin.git
 cd exo_bespin/
-git checkout -b develop origin/develop
+git checkout -b streamline-ec2-configuration origin/streamline-ec2-configuration
 conda env update -f environment.yml
 conda init bash
 source ~/.bashrc
