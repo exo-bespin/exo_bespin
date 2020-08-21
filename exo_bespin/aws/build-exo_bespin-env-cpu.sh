@@ -1,16 +1,19 @@
+#! /bin/bash
+
+cd /home/ec2-user/
+
 echo ''
 echo '~~~~~ INSTALLING ANACONDA ~~~~~'
 echo ''
 sudo yum -y install bzip2
 curl -O https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
 chmod 700 ./Miniconda3-latest-Linux-x86_64.sh
-bash ./Miniconda3-latest-Linux-x86_64.sh -b -p $HOME/miniconda3
+bash ./Miniconda3-latest-Linux-x86_64.sh -b -p /home/ec2-user/miniconda3
 
 echo ''
 echo '~~~~~ SETTING ENVIRONMENT VARIABLES ~~~~~'
 echo ''
 export PATH=/home/ec2-user/miniconda3/bin:$PATH
-echo 'Set $PATH'
 
 echo ''
 echo '~~~~~ CREATING base CONDA ENVIRONMENT ~~~~~'
@@ -25,7 +28,7 @@ echo '~~~~~ INSTALLING exo_bespin ~~~~~'
 echo ''
 git clone https://github.com/exo-bespin/exo_bespin.git
 cd exo_bespin/
-git checkout -b streamline-ec2-configuration origin/streamline-ec2-configuration
+git checkout -b develop origin/develop
 conda env update -f environment.yml
 conda init bash
 source ~/.bashrc
@@ -45,3 +48,9 @@ echo ''
 echo '~~~~~ THE ENVIRONMENT BEING USED ~~~~~'
 echo ''
 conda env export
+
+echo ''
+echo '~~~~~ SETTING PERMISSIONS AND COPYING INIT OUTPUT ~~~~~'
+echo ''
+chmod -R 777 /home/ec2-user/miniconda3/envs/exo-bespin/
+cp /var/log/cloud-init-output.log /home/ec2-user/
