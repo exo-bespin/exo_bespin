@@ -1,0 +1,28 @@
+name: exo-bespin CI
+
+on: [push, pull_request]
+
+jobs:
+
+  environment-installation:
+
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        python-version: [3.7, 3.8]
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Test exo-bespin environment installation
+        run: |
+          cd $RUNNER_WORKSPACE
+          sudo conda create --yes --prefix ./envs python=3.7
+          eval "$(${CONDA}/bin/conda shell.bash hook)"
+          source activate ./envs
+          cd exo_bespin/
+          sudo conda env update -f environment.yml
+          conda activate exo-bespin
+          pip install -e .
+          python -c "import exo_bespin"
+        shell: bash

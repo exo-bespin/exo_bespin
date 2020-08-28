@@ -15,5 +15,6 @@ setup(name='exo_bespin',
       install_requires=REQUIRES,
       author='Matthew Bourque, Rachel Cooper, Néstor Espinoza',
       license='BSD 3',
+      python_requires='>=3.7',
       url='https://github.com/exo-bespin/exo_bespin'
 )
