@@ -5,21 +5,31 @@ on: [push, pull_request]
 jobs:
 
   environment-installation:
+
+    defaults:
+      run:
+        shell: bash
+
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest]
+        python-version: [3.7, 3.8]
+
     steps:
       - uses: actions/checkout@v2
-      - name: Test exo-bespin environment installation
+      - name: Install conda
         run: |
           cd $RUNNER_WORKSPACE
-          sudo conda create --yes --prefix ./envs python=3.7
+          sudo conda create --yes --prefix ./envs python=${{ matrix.python-version }}
           eval "$(${CONDA}/bin/conda shell.bash hook)"
           source activate ./envs
+      - name: Install exo-bespin conda environment
+        run: |
           cd exo_bespin/
           sudo conda env update -f environment.yml
           conda activate exo-bespin
-          pip install -e .
-          python -c "import exo_bespin"
-        shell: bash
+      - name: Install exo_bespin package
+        run: pip install -e .
+      - name: Test exo_bespin import
+        run: python -c "import exo_bespin"
