@@ -20,7 +20,7 @@ To obtain the ``exo_bespin`` package with the necessary environment files, clone
 
 ::
 
-  git clone https://github.com/exo-espin/exo_bespin.git
+  git clone https://github.com/exo-bespin/exo_bespin.git
   cd exo_bespin
 
 
