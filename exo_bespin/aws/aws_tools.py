@@ -122,6 +122,42 @@ def log_output(output):
         logging.info(line)
 
 
+def run_command(command, instance, key, client):
+    """Executes the given command on the given EC2 instance
+
+    Parameters
+    ----------
+    command : str
+        The command to run (e.g. ``python run_myscript.py``)
+    instance : obj
+        A ``boto3`` AWS EC2 instance object.
+    key : obj
+        A ``paramiko.rsakey.RSAKey`` object.
+    client : obj
+        A ``paramiko.client.SSHClient`` object.
+
+    Returns
+    -------
+    output : str
+        The standard output from running the command
+    errors : str
+        The standard error output from running the command
+    """
+
+    client.connect(hostname=instance.public_dns_name, username='ec2-user', pkey=key)
+    stdin, stdout, stderr = client.exec_command(command)
+    output = stdout.read()
+    errors = stderr.read()
+
+    # Make output a more readable
+    output = output.decode("utf-8")
+    output = output.replace('\t', '  ').replace('\r', '').replace("\'", "").split('\n')
+    errors = errors.decode("utf-8")
+    errors = errors.replace('\t', '  ').replace('\r', '').replace("\'", "").split('\n')
+
+    return output, errors
+
+
 def start_ec2(ssh_file, ec2_id):
     """Create a new EC2 instance or start an existing EC2 instance.
 
@@ -260,3 +296,43 @@ def transfer_to_ec2(instance, key, client, filename):
             logging.warning('Could not connect to {}, retrying.'.format(instance.public_dns_name))
             time.sleep(5)
             iterations += 1
+
+
+def wait_for_instance(instance, key, client):
+    """Waits for the given EC2 instance to be completely set up with
+    the `exo_bespin` software environment.
+
+    The `exo_bespin` software environment is considered complete when
+    the `cloud-init-output.log` file exists in the instance's home
+    directory, as the last step in the build process is to copy that
+    file there (see `build-exo_bespin-env-cpu.sh`).
+
+    Parameters
+    ----------
+    instance : obj
+        A ``boto3`` AWS EC2 instance object.
+    key : obj
+        A ``paramiko.rsakey.RSAKey`` object.
+    client : obj
+        A ``paramiko.client.SSHClient`` object.
+    """
+
+    instance_ready = False
+    iteration = 0
+
+    while not instance_ready:
+
+        if iteration == 50:
+            print('Timeout encountered when waiting for {} to be ready'.format(instance.public_dns_name))
+            break
+
+        try:
+            output, errors = run_command('ls cloud-init-output.log', instance, key, client)
+            if 'cloud-init-output.log' in output:
+                instance_ready = True
+            else:
+                iteration +=1
+                time.sleep(10)
+        except:
+            iteration += 1
+            time.sleep(10)
