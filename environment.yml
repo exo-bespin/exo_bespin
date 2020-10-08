@@ -12,4 +12,5 @@ dependencies:
   - pip:
     - awscli
     - corner==2.1.0
+    - juliet==2.0.25
     - platon==4.0
