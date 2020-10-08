@@ -3,6 +3,7 @@ import os
 from setuptools import setup, find_packages
 
 REQUIRES = ['boto3',
+            'juliet',
             'numpy',
             'paramiko',
             'platon',
