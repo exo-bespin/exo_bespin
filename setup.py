@@ -2,7 +2,10 @@
 import os
 from setuptools import setup, find_packages
 
-REQUIRES = ['boto3',
+REQUIRES = ['awscli',
+            'bibtexparser',
+            'boto3',
+            'corner'
             'juliet',
             'numpy',
             'paramiko',
