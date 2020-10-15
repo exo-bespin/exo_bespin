@@ -5,7 +5,7 @@ from setuptools import setup, find_packages
 REQUIRES = ['awscli',
             'bibtexparser',
             'boto3',
-            'corner'
+            'corner',
             'juliet',
             'numpy',
             'paramiko',
