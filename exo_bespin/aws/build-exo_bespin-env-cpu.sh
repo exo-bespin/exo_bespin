@@ -21,7 +21,7 @@ echo ''
 export PATH=/home/ec2-user/miniconda3/bin:$PATH
 
 echo ''
-echo '~~~~~ CREATING base CONDA ENVIRONMENT ~~~~~'
+echo '~~~~~ CREATING INITIAL CONDA ENVIRONMENT ~~~~~'
 echo ''
 conda create --yes -n exo-bespin python=3.7
 conda init bash
@@ -29,7 +29,7 @@ source ~/.bashrc
 conda activate exo-bespin
 
 echo ''
-echo '~~~~~ INSTALLING exo_bespin ~~~~~'
+echo '~~~~~ INSTALLING exo-bespin ENVIRONMENT ~~~~~'
 echo ''
 git clone https://github.com/exo-bespin/exo_bespin.git
 cd exo_bespin/
@@ -39,14 +39,6 @@ source ~/.bashrc
 conda activate exo-bespin
 python setup.py develop
 cd ../
-
-echo ''
-echo '~~~~~ INSTALLING ADDITIONAL LIBRARIES ~~~~~'
-echo ''
-pip install bibtexparser==1.1.0
-pip install corner==2.0.1
-pip install lmfit==0.9.13
-pip install platon==3.1
 
 echo ''
 echo '~~~~~ THE ENVIRONMENT BEING USED ~~~~~'
