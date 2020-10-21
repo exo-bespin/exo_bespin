@@ -101,7 +101,7 @@ def create_ec2_launch_template():
         LaunchTemplateName='exo-bespin-lt',
         LaunchTemplateData={
             'ImageId': 'ami-098f16afa9edf40be',
-            'InstanceType': 't2.small',
+            'InstanceType': 't2.medium',
             'KeyName': get_config()['key_pair_name'],
             'UserData': user_data,
             'SecurityGroupIds': [get_config()['security_group_id'], ],
@@ -399,3 +399,8 @@ def wait_for_instance(instance, key, client):
     """
 
     wait_for_file(instance, key, client, 'cloud-init-output.log')
+
+
+if __name__ == '__main__':
+
+    create_ec2_launch_template()
