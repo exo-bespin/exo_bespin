@@ -338,7 +338,7 @@ def wait_for_file(instance, key, client, filename):
             if os.path.basename(filename) in output:
                 file_exists = True
             else:
-                iteration +=1
+                iteration += 1
                 time.sleep(10)
         except:
             iteration += 1
