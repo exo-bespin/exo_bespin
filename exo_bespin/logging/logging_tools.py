@@ -27,8 +27,28 @@ Use
 """
 
 import datetime
+import getpass
 import logging
 import os
+import socket
+import subprocess
+import sys
+
+
+def _log_environment_info():
+    """Logs information about the user's environment and system"""
+
+    # Log environment information
+    logging.info('User: ' + getpass.getuser())
+    logging.info('System: ' + socket.gethostname())
+    logging.info('Python Version: ' + sys.version.replace('\n', ''))
+    logging.info('Python Executable Path: ' + sys.executable)
+
+    # Log the software environment
+    environment = subprocess.check_output(['conda', 'env', 'export'], universal_newlines=True)
+    logging.info('Environment:')
+    for line in environment.split('\n'):
+        logging.info(line)
 
 
 def configure_logging(log_filename, log_dir=os.path.expanduser("~")):
@@ -65,5 +85,8 @@ def configure_logging(log_filename, log_dir=os.path.expanduser("~")):
                         level=logging.INFO)
 
     print('Log file initialized to {}'.format(full_filename))
+
+    # Log system information
+    _log_environment_info()
 
     return full_filename

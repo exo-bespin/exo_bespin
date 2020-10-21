@@ -23,9 +23,9 @@ Dependencies
 """
 
 import os
-import shutil
 
 from exo_bespin.logging import logging_tools
+
 
 def test_configure_logging():
     """Assert that the ``configure_logging`` function successfully
