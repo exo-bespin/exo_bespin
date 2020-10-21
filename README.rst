@@ -65,7 +65,8 @@ environment, run the ``exo_bespin`` setup script:
   python setup.py develop
 
 
-``aws_config.json``
+``aws_config.json`` File
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 Users that wish to utilze the ``aws`` subpackage must have an ``aws_config.json``
 file within the ``exo_bespin/aws`` directory in the local installation locataion.
