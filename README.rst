@@ -14,7 +14,7 @@ You must first have a working installation of ``anaconda`` or ``miniconda`` for 
 
 
 Obtain the ``exo_bespin`` Package
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 To obtain the ``exo_bespin`` package with the necessary environment files, clone the repository directly from GitHub:
 
@@ -63,6 +63,22 @@ environment, run the ``exo_bespin`` setup script:
 ::
 
   python setup.py develop
+
+
+``aws_config.json``
+
+Users that wish to utilze the ``aws`` subpackage must have an ``aws_config.json``
+file within the ``exo_bespin/aws`` directory in the local installation locataion.
+Below is a template of the contents of this file:
+
+::
+
+  {
+   "ec2_id" : "",  # EC2 instance ID or EC2 Launch Template ID
+   "key_pair_name": "",  # Name of the SSH key/pair used to connect to EC2
+   "security_group_id": "",  # ID of security group used to connect to EC2
+   "ssh_file" : ""  # Path to public SSH key
+  }
 
 
 Missing Dependencies?
