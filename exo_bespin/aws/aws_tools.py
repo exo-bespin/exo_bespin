@@ -298,6 +298,53 @@ def transfer_to_ec2(instance, key, client, filename):
             iterations += 1
 
 
+def wait_for_file(instance, key, client, filename):
+    """Waits for the existance of the given ``filename`` on the given
+    EC2 instance before proceeding.
+
+    The given ``filename`` must be a full path to the file of interest
+    relative to the EC2 instance's ``$HOME`` directory.  For example,
+    supplying ``foo.txt`` will look for ``/home/ec2-user/foo.txt``, and
+    supplying ``my_dir/bar.txt`` will look for
+    ``/home/ec2-user/my_dir/bar.txt``.
+
+    Note that this function assumes that the EC2 instsance is already
+    up and running, so users should be careful about the timing and
+    placement of this function in their code.
+
+    Parameters
+    ----------
+    instance : obj
+        A ``boto3`` AWS EC2 instance object.
+    key : obj
+        A ``paramiko.rsakey.RSAKey`` object.
+    client : obj
+        A ``paramiko.client.SSHClient`` object.
+    filename : str
+        The filename of interest
+    """
+
+    file_exists = False
+    iteration = 0
+
+    while not file_exists:
+
+        if iteration == 100:
+            print('Timeout encountered when waiting for {} to be ready'.format(instance.public_dns_name))
+            break
+
+        try:
+            output, errors = run_command('ls {}'.format(filename), instance, key, client)
+            if os.path.basename(filename) in output:
+                file_exists = True
+            else:
+                iteration +=1
+                time.sleep(10)
+        except:
+            iteration += 1
+            time.sleep(10)
+
+
 def wait_for_instance(instance, key, client):
     """Waits for the given EC2 instance to be completely set up with
     the `exo_bespin` software environment.
@@ -317,22 +364,4 @@ def wait_for_instance(instance, key, client):
         A ``paramiko.client.SSHClient`` object.
     """
 
-    instance_ready = False
-    iteration = 0
-
-    while not instance_ready:
-
-        if iteration == 50:
-            print('Timeout encountered when waiting for {} to be ready'.format(instance.public_dns_name))
-            break
-
-        try:
-            output, errors = run_command('ls cloud-init-output.log', instance, key, client)
-            if 'cloud-init-output.log' in output:
-                instance_ready = True
-            else:
-                iteration +=1
-                time.sleep(10)
-        except:
-            iteration += 1
-            time.sleep(10)
+    wait_for_file(instance, key, client, 'cloud-init-output.log')
