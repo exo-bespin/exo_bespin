@@ -3,6 +3,7 @@ channels:
   - defaults
 dependencies:
   - boto3=1.9.66
+  - flake8=3.8.4
   - jupyter=1.0.0
   - numpy=1.18.5
   - paramiko=2.7.1
