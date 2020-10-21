@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 """This module contains various functions for interacting with AWS EC2
 instances
 
@@ -40,6 +38,7 @@ Dependencies
     public key used for logging into an AWS account.
 """
 
+import base64
 import json
 import logging
 import os
@@ -86,6 +85,41 @@ def build_environment(instance, key, client):
     log_output(output)
 
 
+def create_ec2_launch_template():
+    """Creates an ``exo-besin`` EC2 launch template"""
+
+    # Gather user data and encode with base 64
+    with open('build-exo_bespin-env-cpu.sh', 'r') as f:
+        user_data = f.read()
+    user_data = user_data.encode('ascii')
+    user_data = base64.b64encode(user_data)
+    user_data = user_data.decode('ascii')
+
+    # Create launch template
+    client = boto3.client('ec2')
+    response = client.create_launch_template(
+        LaunchTemplateName='exo-bespin-lt',
+        LaunchTemplateData={
+            'ImageId': 'ami-098f16afa9edf40be',
+            'InstanceType': 't2.medium',
+            'KeyName': get_config()['key_pair_name'],
+            'UserData': user_data,
+            'SecurityGroupIds': [get_config()['security_group_id'], ],
+            'BlockDeviceMappings': [{
+                'DeviceName': '/dev/sda1',
+                'Ebs': {
+                    'Encrypted': False,
+                    'DeleteOnTermination': True,
+                    'SnapshotId': 'snap-0c4e8263cef786d91',
+                    'VolumeSize': 20,
+                    'VolumeType': 'gp2'},
+            }, ],
+        },
+    )
+
+    print('\nCreated EC2 Launch Template:\n\n{}\n'.format(response))
+
+
 def get_config():
     """Return a dictionary that holds the contents of the
     ``aws_config.json`` config file.
@@ -120,6 +154,42 @@ def log_output(output):
     output = output.replace('\t', '  ').replace('\r', '').replace("\'", "").split('\n')
     for line in output:
         logging.info(line)
+
+
+def run_command(command, instance, key, client):
+    """Executes the given command on the given EC2 instance
+
+    Parameters
+    ----------
+    command : str
+        The command to run (e.g. ``python run_myscript.py``)
+    instance : obj
+        A ``boto3`` AWS EC2 instance object.
+    key : obj
+        A ``paramiko.rsakey.RSAKey`` object.
+    client : obj
+        A ``paramiko.client.SSHClient`` object.
+
+    Returns
+    -------
+    output : str
+        The standard output from running the command
+    errors : str
+        The standard error output from running the command
+    """
+
+    client.connect(hostname=instance.public_dns_name, username='ec2-user', pkey=key)
+    stdin, stdout, stderr = client.exec_command(command)
+    output = stdout.read()
+    errors = stderr.read()
+
+    # Make output a more readable
+    output = output.decode("utf-8")
+    output = output.replace('\t', '  ').replace('\r', '').replace("\'", "").split('\n')
+    errors = errors.decode("utf-8")
+    errors = errors.replace('\t', '  ').replace('\r', '').replace("\'", "").split('\n')
+
+    return output, errors
 
 
 def start_ec2(ssh_file, ec2_id):
@@ -260,3 +330,77 @@ def transfer_to_ec2(instance, key, client, filename):
             logging.warning('Could not connect to {}, retrying.'.format(instance.public_dns_name))
             time.sleep(5)
             iterations += 1
+
+
+def wait_for_file(instance, key, client, filename):
+    """Waits for the existance of the given ``filename`` on the given
+    EC2 instance before proceeding.
+
+    The given ``filename`` must be a full path to the file of interest
+    relative to the EC2 instance's ``$HOME`` directory.  For example,
+    supplying ``foo.txt`` will look for ``/home/ec2-user/foo.txt``, and
+    supplying ``my_dir/bar.txt`` will look for
+    ``/home/ec2-user/my_dir/bar.txt``.
+
+    Note that this function assumes that the EC2 instsance is already
+    up and running, so users should be careful about the timing and
+    placement of this function in their code.
+
+    Parameters
+    ----------
+    instance : obj
+        A ``boto3`` AWS EC2 instance object.
+    key : obj
+        A ``paramiko.rsakey.RSAKey`` object.
+    client : obj
+        A ``paramiko.client.SSHClient`` object.
+    filename : str
+        The filename of interest
+    """
+
+    file_exists = False
+    iteration = 0
+
+    while not file_exists:
+
+        if iteration == 100:
+            print('Timeout encountered when waiting for {} to be ready'.format(instance.public_dns_name))
+            break
+
+        try:
+            output, errors = run_command('ls {}'.format(filename), instance, key, client)
+            if os.path.basename(filename) in output:
+                file_exists = True
+            else:
+                iteration += 1
+                time.sleep(10)
+        except:
+            iteration += 1
+            time.sleep(10)
+
+
+def wait_for_instance(instance, key, client):
+    """Waits for the given EC2 instance to be completely set up with
+    the `exo_bespin` software environment.
+
+    The `exo_bespin` software environment is considered complete when
+    the `cloud-init-output.log` file exists in the instance's home
+    directory, as the last step in the build process is to copy that
+    file there (see `build-exo_bespin-env-cpu.sh`).
+
+    Parameters
+    ----------
+    instance : obj
+        A ``boto3`` AWS EC2 instance object.
+    key : obj
+        A ``paramiko.rsakey.RSAKey`` object.
+    client : obj
+        A ``paramiko.client.SSHClient`` object.
+    """
+
+    wait_for_file(instance, key, client, 'cloud-init-output.log')
+
+
+if __name__ == '__main__':
+
+    create_ec2_launch_template()
