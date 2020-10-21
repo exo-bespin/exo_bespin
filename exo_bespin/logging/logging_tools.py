@@ -15,7 +15,8 @@ Use
         from exo_bespin.logging.logging_tools import configure_logging
         configure_logging('my_log')
 
-    This will create a log file at the location ``$HOME/my_log.log``
+    This will create a log file at the location
+    ``$HOME/exo_bespin_logs/my_log.log``
 
     Users may also supply a ``log_dir`` parameter to change the parent
     directory in which the log file is saved, for example:
@@ -33,6 +34,7 @@ import os
 import socket
 import subprocess
 import sys
+import time
 
 
 def _log_environment_info():
@@ -51,8 +53,13 @@ def _log_environment_info():
         logging.info(line)
 
 
-def configure_logging(log_filename, log_dir=os.path.expanduser("~")):
+def configure_logging(log_filename, log_dir=os.path.join(os.path.expanduser("~"), 'exo_bespin_logs/')):
     """Configure the log file with a standard logging format.
+
+    By default, the log file will be written to a ``exo_bespin_logs/``
+    subdirectory in the user's ``$HOME`` directory.  However, the user
+    may supply a ``log_dir`` parameter to write this file somewhere
+    else.
 
     Parameters
     ----------
@@ -90,3 +97,32 @@ def configure_logging(log_filename, log_dir=os.path.expanduser("~")):
     _log_environment_info()
 
     return full_filename
+
+
+def log_timing(func):
+    """Decorator to time a module or function within a code.
+
+    Parameters
+    ----------
+    func : func
+        The function to time.
+
+    Returns
+    -------
+    wrapped : func
+        The wrapped function. Will log the time."""
+
+    def wrapped(*args, **kwargs):
+
+        # Call the function and time it
+        start = time.time()
+        func(*args, **kwargs)
+        end = time.time()
+
+        # Log execution time
+        hours, remainder = divmod(end - start, 60 * 60)
+        minutes, seconds = divmod(remainder, 60)
+        logging.info('')
+        logging.info('Elapsed Time of {}: {}:{}:{}'.format(func.__name__, int(hours), int(minutes), int(seconds)))
+
+    return wrapped
