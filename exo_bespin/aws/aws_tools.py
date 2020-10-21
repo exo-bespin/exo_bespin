@@ -38,6 +38,7 @@ Dependencies
     public key used for logging into an AWS account.
 """
 
+import base64
 import json
 import logging
 import os
@@ -82,6 +83,41 @@ def build_environment(instance, key, client):
 
     output = stdout.read()
     log_output(output)
+
+
+def create_ec2_launch_template():
+    """Creates an ``exo-besin`` EC2 launch template"""
+
+    # Gather user data and encode with base 64
+    with open('build-exo_bespin-env-cpu.sh', 'r') as f:
+        user_data = f.read()
+    user_data = user_data.encode('ascii')
+    user_data = base64.b64encode(user_data)
+    user_data = user_data.decode('ascii')
+
+    # Create launch template
+    client = boto3.client('ec2')
+    response = client.create_launch_template(
+        LaunchTemplateName='exo-bespin-lt',
+        LaunchTemplateData={
+            'ImageId': 'ami-098f16afa9edf40be',
+            'InstanceType': 't2.small',
+            'KeyName': get_config()['key_pair_name'],
+            'UserData': user_data,
+            'SecurityGroupIds': [get_config()['security_group_id'], ],
+            'BlockDeviceMappings': [{
+                'DeviceName': '/dev/sda1',
+                'Ebs': {
+                    'Encrypted': False,
+                    'DeleteOnTermination': True,
+                    'SnapshotId': 'snap-0c4e8263cef786d91',
+                    'VolumeSize': 20,
+                    'VolumeType': 'gp2'},
+            }, ],
+        },
+    )
+
+    print('\nCreated EC2 Launch Template:\n\n{}\n'.format(response))
 
 
 def get_config():
