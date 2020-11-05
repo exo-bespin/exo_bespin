@@ -7,6 +7,10 @@ echo '~~~~~ INSTALLING DEV TOOLS ~~~~~'
 echo ''
 sudo yum -y install bzip2
 sudo yum -y groupinstall "Development Tools"
+sudo yum -y install screen
+
+echo '~~~~~ STARTING SCREEN ~~~~~'
+screen -S exobespin # start a screen session named 'exobespin'
 
 echo ''
 echo '~~~~~ INSTALLING ANACONDA ~~~~~'
@@ -33,6 +37,7 @@ echo '~~~~~ INSTALLING exo-bespin ENVIRONMENT ~~~~~'
 echo ''
 git clone https://github.com/exo-bespin/exo_bespin.git
 cd exo_bespin/
+git checkout -b screen_testing origin/screen_testing
 conda env update -f environment.yml
 conda init bash
 source ~/.bashrc

@@ -1,4 +1,4 @@
 {
-    "ec2_id" : "i-0c1092954faa73726",
-    "ssh_file" : "/Users/bourque/.ssh/aws_bourque_exo_bespin"
+    "ec2_id" : "lt-0e836caffd2454b8a",
+    "ssh_file" : "/user/rcooper/Projects/Exoplanets/exo_bespin/exo_bespin_aws"
 }
