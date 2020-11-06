@@ -5,9 +5,10 @@ cd /home/ec2-user/
 echo ''
 echo '~~~~~ INSTALLING DEV TOOLS ~~~~~'
 echo ''
-sudo yum -y install bzip2
-sudo yum -y groupinstall "Development Tools"
-sudo yum -y install screen
+sudo apt update
+sudo apt -y install bzip2
+sudo apt -y groupinstall "Development Tools"
+sudo apt -y install screen
 
 echo '~~~~~ STARTING SCREEN ~~~~~'
 screen -S exobespin # start a screen session named 'exobespin'
