@@ -1,24 +1,32 @@
 #! /bin/bash
 
-cd /home/ec2-user/
+HOME_DIR=$HOME
+cd $HOME_DIR
 
 echo ''
 echo '~~~~~ INSTALLING DEV TOOLS ~~~~~'
 echo ''
-sudo yum -y install bzip2
-sudo yum -y groupinstall "Development Tools"
+if [ $HOME_DIR = "/home/ec2-user" ]; then
+    sudo yum -y install bzip2
+    sudo yum -y groupinstall "Development Tools"
+fi
+
+if [ $HOME_DIR = "/home/ubuntu" ]; then
+    sudo apt update
+    sudo apt -y install build-essential
+fi
 
 echo ''
 echo '~~~~~ INSTALLING ANACONDA ~~~~~'
 echo ''
 curl -O https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
 chmod 700 ./Miniconda3-latest-Linux-x86_64.sh
-bash ./Miniconda3-latest-Linux-x86_64.sh -b -p /home/ec2-user/miniconda3
+bash ./Miniconda3-latest-Linux-x86_64.sh -b -p $HOME_DIR/miniconda3
 
 echo ''
 echo '~~~~~ SETTING ENVIRONMENT VARIABLES ~~~~~'
 echo ''
-export PATH=/home/ec2-user/miniconda3/bin:$PATH
+export PATH=$HOME_DIR/miniconda3/bin:$PATH
 
 echo ''
 echo '~~~~~ CREATING INITIAL CONDA ENVIRONMENT ~~~~~'
@@ -48,5 +56,5 @@ conda env export
 echo ''
 echo '~~~~~ SETTING PERMISSIONS AND COPYING INIT OUTPUT ~~~~~'
 echo ''
-chmod -R 777 /home/ec2-user/miniconda3/envs/exo-bespin/
-cp /var/log/cloud-init-output.log /home/ec2-user/
+chmod -R 777 $HOME_DIR/miniconda3/envs/exo-bespin/
+cp /var/log/cloud-init-output.log $HOME_DIR
