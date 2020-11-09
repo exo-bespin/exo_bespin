@@ -5,13 +5,12 @@ cd /home/ec2-user/
 echo ''
 echo '~~~~~ INSTALLING DEV TOOLS ~~~~~'
 echo ''
-sudo apt update
-sudo apt -y install bzip2
-sudo apt -y groupinstall "Development Tools"
-sudo apt -y install screen
+sudo yum -y install bzip2
+sudo yum -y groupinstall "Development Tools"
+sudo yum -y install tmux
 
 echo '~~~~~ STARTING SCREEN ~~~~~'
-screen -S exobespin # start a screen session named 'exobespin'
+tmux new -s exobespin # start a new tmux session named 'exobespin'
 
 echo ''
 echo '~~~~~ INSTALLING ANACONDA ~~~~~'
