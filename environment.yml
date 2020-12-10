@@ -3,6 +3,7 @@ channels:
   - defaults
 dependencies:
   - boto3=1.9.66
+  - django=2.2.5
   - flake8=3.8.4
   - git=2.23.0
   - jupyter=1.0.0
