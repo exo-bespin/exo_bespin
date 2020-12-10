@@ -85,7 +85,7 @@ def build_environment(instance, key, client):
     log_output(output)
 
 
-def create_ec2_launch_template(platform='linux'):
+def create_ec2_launch_template(platform='linux', name=None):
     """Creates an ``exo-besin`` EC2 launch template
 
     Parameters
@@ -93,14 +93,19 @@ def create_ec2_launch_template(platform='linux'):
     platform : str
         The operating system to use.  Must be either ``linux`` or
         ``ubuntu``
+    name : str
+        The name to use for the EC2 launch template
     """
 
     assert platform in ['linux', 'ubuntu'], 'Provided platform must be either "linux" or "ubuntu"'
 
+    # Parse user parameters
     if platform == 'linux':
         ami = 'ami-098f16afa9edf40be'
     elif platform == 'ubuntu':
         ami = 'ami-0dba2cb6798deb6d8'
+    if name is None:
+        name = f'exo-bespin-lt-{platform}'
 
     # Gather user data and encode with base 64
     with open('build-exo_bespin-env-cpu.sh', 'r') as f:
@@ -112,7 +117,7 @@ def create_ec2_launch_template(platform='linux'):
     # Create launch template
     client = boto3.client('ec2')
     response = client.create_launch_template(
-        LaunchTemplateName=f'exo-bespin-lt-{platform}',
+        LaunchTemplateName=name,
         LaunchTemplateData={
             'ImageId': ami,
             'InstanceType': 't2.medium',
