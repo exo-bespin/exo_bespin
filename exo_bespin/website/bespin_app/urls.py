@@ -43,11 +43,12 @@ from django.urls import re_path
 
 from . import views
 
-#app_name = 'bespin'
+app_name = 'bespin_app'
 
 urlpatterns = [
 
     # Home
     path('', views.home, name='home'),
+    path('ajax/test_ec2/', views.test_ec2, name='test_ec2'),
 
 ]

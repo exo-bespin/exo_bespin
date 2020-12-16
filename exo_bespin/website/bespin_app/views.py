@@ -30,10 +30,15 @@ References
 Dependencies
 ------------
 
+    - ``django``
+
 """
 
+from django.http import HttpResponse
 from django.http import HttpRequest as request
 from django.shortcuts import render
+
+from exo_bespin.aws import aws_tools
 
 
 def home(request):
@@ -54,3 +59,23 @@ def home(request):
     context = {}
 
     return render(request, template, context)
+
+
+def test_ec2(request):
+    """
+    """
+
+    ssh_file = aws_tools.get_config()['ssh_file']
+    ec2_id = aws_tools.get_config()['ec2_id']
+
+    instance, key, client = aws_tools.start_ec2(ssh_file, ec2_id)
+    aws_tools.wait_for_instance(instance, key, client)
+
+    command = './exo_bespin/exo_bespin/aws/exo_bespin-env-init.sh python exo_bespin/notebooks/data/ec2_example.py'
+    output, errors = aws_tools.run_command(command, instance, key, client)
+    for line in output:
+        print(line)
+
+    aws_tools.stop_ec2(ec2_id, instance)
+
+    return HttpResponse('Process complete')
