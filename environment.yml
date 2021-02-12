@@ -17,5 +17,5 @@ dependencies:
     - batman-package==2.4.6
     - bibtexparser==1.1.0
     - corner==2.1.0
-    - juliet==2.0.25
     - platon==4.0
+    - git+https://github.com/nespinoza/juliet.git@dev
