@@ -3,6 +3,7 @@ channels:
   - defaults
 dependencies:
   - boto3
+  - cython=0.29.22
   - flake8=3.8.4
   - git=2.23.0
   - jupyter=1.0.0
