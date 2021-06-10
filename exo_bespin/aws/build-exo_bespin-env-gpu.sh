@@ -87,3 +87,13 @@ echo ''
 echo '~~~~~ THE ENVIRONMENT BEING USED ~~~~~'
 echo ''
 conda env export
+
+wget https://developer.download.nvidia.com/hpc-sdk/21.2/nvhpc_2021_212_Linux_x86_64_cuda_11.2.tar.gz
+tar xpzf nvhpc_2021_212_Linux_x86_64_cuda_11.2.tar.gz
+sudo nvhpc_2021_212_Linux_x86_64_cuda_11.2/install  # Select option 2 (Network installation), keep default paths
+export PATH=/opt/nvidia/hpc_sdk/Linux_x86_64/21.2/compilers/bin:$PATH
+
+git clone https://github.com/lkreidberg/batman.git
+cd batman
+LDSHARED="pgcc" LDFLAGS="-noswitcherror -O3 -shared -L/opt/nvidia/hpc_sdk/Linux_x86_64/21.2/compilers/lib -laccapimp -laccgmp -laccnmp -laccg2mp -ldl -lcudadevice -lpgmp -lnuma -lpthread -lnspgc -lpgc" CC=pgcc CFLAGS="-noswitcherror -O3 -acc -ta=nvidia:nordc -Minfo=accel -mp" python setup.py install
+
