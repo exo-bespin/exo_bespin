@@ -49,6 +49,7 @@ urlpatterns = [
 
     # Home
     path('', views.home, name='home'),
-    path('ajax/test_ec2/', views.test_ec2, name='test_ec2'),
+    path('results/', views.results, name='results'),
+    path('ajax/results/', views.results_ajax, name='results_ajax'),
 
 ]

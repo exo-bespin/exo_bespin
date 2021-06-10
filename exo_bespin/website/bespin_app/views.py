@@ -61,7 +61,17 @@ def home(request):
     return render(request, template, context)
 
 
-def test_ec2(request):
+def results(request):
+    """
+    """
+
+    template = 'results.html'
+    context = {}
+
+    return render(request, template, context)
+
+
+def results_ajax(request):
     """
     """
 
@@ -71,7 +81,7 @@ def test_ec2(request):
     instance, key, client = aws_tools.start_ec2(ssh_file, ec2_id)
     aws_tools.wait_for_instance(instance, key, client)
 
-    command = './exo_bespin/exo_bespin/aws/exo_bespin-env-init.sh python exo_bespin/notebooks/data/ec2_example.py'
+    command = './exo_bespin/exo_bespin/aws/exo_bespin-env-init.sh python exo_bespin/exo_bespin/examples/ec2_example.py'
     output, errors = aws_tools.run_command(command, instance, key, client)
     for line in output:
         print(line)
