@@ -38,7 +38,7 @@ conda activate exo-bespin  # Activate new conda environment
 echo ''
 echo '~~~~~ INSTALLING exo-bespin ENVIRONMENT ~~~~~'
 echo ''
-git clone https://github.com/exo-bespin/exo_bespin.git  # Clone the exo_bespin repository
+git clone -b hello-world-web-app https://github.com/exo-bespin/exo_bespin.git  # Clone the exo_bespin repository
 cd exo_bespin/
 conda env update -f environment.yml  # Install exo-bespin conda environment
 conda init bash  # Re-initialize bash
