@@ -47,6 +47,8 @@ conda activate exo-bespin  # Activate conda environment
 python setup.py develop  #  Install exo_bespin package into conda environment
 cd ../
 
+pip install -U numpy
+
 echo ''
 echo '~~~~~ THE ENVIRONMENT BEING USED ~~~~~'
 echo ''

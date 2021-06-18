@@ -6,6 +6,7 @@ dependencies:
   - django=2.2.5
   - flake8=3.8.4
   - git=2.23.0
+  - h5py
   - jupyter=1.0.0
   - numpy=1.19.1
   - paramiko=2.7.1
@@ -13,9 +14,10 @@ dependencies:
   - pytest=6.1.1
   - python=3.7.7
   - scp=0.13.2
+  - tqdm
   - pip:
     - awscli
     - bibtexparser==1.1.0
     - corner==2.1.0
-    - juliet==2.0.25
     - platon==4.0
+    - https://github.com/nespinoza/juliet.git@dev
