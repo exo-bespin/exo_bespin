@@ -50,6 +50,14 @@ cd ../
 pip install -U numpy
 
 echo ''
+echo '~~~~~ INSTALLING juliet ~~~~~'
+echo ''
+git clone -b dev https://github.com/nespinoza/juliet.git
+cd juliet
+python setup.py develop
+cd ../
+
+echo ''
 echo '~~~~~ THE ENVIRONMENT BEING USED ~~~~~'
 echo ''
 conda env export  #  Display full environment for logging purposes
