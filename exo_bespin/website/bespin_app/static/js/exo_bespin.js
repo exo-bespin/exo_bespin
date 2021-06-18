@@ -14,6 +14,7 @@ function update_results() {
         url: 'http://127.0.0.1:8000/ajax/results/',
         success: function(data){
 
+            console.log('Here');
             $("#results")[0].innerHTML = 'Process Complete!!'
         }
     });

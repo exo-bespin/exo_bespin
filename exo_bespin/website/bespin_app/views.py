@@ -71,7 +71,7 @@ def results(request):
     return render(request, template, context)
 
 
-def results_ajax(request):
+def _ajax_results(request):
     """
     """
 
@@ -79,13 +79,13 @@ def results_ajax(request):
     ec2_id = aws_tools.get_config()['ec2_id']
 
     instance, key, client = aws_tools.start_ec2(ssh_file, ec2_id)
-    aws_tools.wait_for_instance(instance, key, client)
+    # aws_tools.wait_for_instance(instance, key, client)
 
-    command = './exo_bespin/exo_bespin/aws/exo_bespin-env-init.sh python exo_bespin/exo_bespin/examples/ec2_example.py'
-    output, errors = aws_tools.run_command(command, instance, key, client)
-    for line in output:
-        print(line)
+    # command = './exo_bespin/exo_bespin/aws/exo_bespin-env-init.sh python exo_bespin/exo_bespin/examples/ec2_example.py'
+    # output, errors = aws_tools.run_command(command, instance, key, client)
+    # for line in output:
+    #     print(line)
 
-    aws_tools.stop_ec2(ec2_id, instance)
+    # aws_tools.stop_ec2(ec2_id, instance)
 
     return HttpResponse('Process complete')

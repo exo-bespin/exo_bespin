@@ -16,6 +16,7 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
         <!-- Custom scripts -->
+        <script src="{{ static('js/exo_bespin.js') }}?{% now 'U' %}"></script>
 
     </head>
 
@@ -41,16 +42,6 @@
 
     <!-- Display the results -->
     <div id='results'></div>
-    <script>
-        function update_results() {
-            $.ajax({
-                url: 'http://127.0.0.1:8000/ajax/results/',
-                success: function(data){
-
-                    $("#results")[0].innerHTML = 'Process Complete!!'
-                }
-            });
-        };
-    </script>
+    <script>update_results();</script>
 
 </main>
