@@ -118,7 +118,11 @@ def create_ec2_launch_template(platform='linux'):
             'InstanceType': 't2.medium',
             'KeyName': get_config()['key_pair_name'],
             'UserData': user_data,
-            'SecurityGroupIds': [get_config()['security_group_id'], ],
+            'NetworkInterfaces': [{
+                'AssociatePublicIpAddress': True,
+                'DeviceIndex': 0,
+                'Groups': [get_config()['security_group_id']],
+            }, ],
             'BlockDeviceMappings': [{
                 'DeviceName': '/dev/sda1',
                 'Ebs': {
