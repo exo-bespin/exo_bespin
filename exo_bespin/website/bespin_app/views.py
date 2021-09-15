@@ -72,14 +72,16 @@ def _process_request(form):
     for line in output:
         print(line)
 
-    # # Get the results back
-    # aws_tools.transfer_from_ec2(instance, key, client, 'results/lc.dat')
+    # Get the results back
+    aws_tools.transfer_from_ec2(instance, key, client, 'results/lc.dat')
 
-    # # Stop the EC2 instance
-    # aws_tools.stop_ec2(ec2_id, instance)
+    # Stop the EC2 instance
+    aws_tools.stop_ec2(ec2_id, instance)
 
     # Parse the results
-    results = {}
+    with open('lc.dat', 'r') as f:
+        data = f.readlines()
+    results = {'data' : data}
 
     return results
 
