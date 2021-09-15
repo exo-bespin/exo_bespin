@@ -49,7 +49,4 @@ urlpatterns = [
 
     # Home
     path('', views.home, name='home'),
-    path('results/', views.results, name='results'),
-    path('ajax/results/', views._ajax_results, name='_ajax_results'),
-
 ]

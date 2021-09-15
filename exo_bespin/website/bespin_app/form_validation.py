@@ -7,11 +7,10 @@ class ExampleForm(forms.Form):
     """
     """
 
-    username = forms.CharField(label='Username', max_length=100)
+    rp = forms.FloatField(label='rp', min_value=1E-6, max_value=1E6)
 
-    def clean_username(self):
+    def get_cleaned_data(self):
         """
         """
 
-        username = self.cleaned_data['username']
-        return username
+        return self.cleaned_data
