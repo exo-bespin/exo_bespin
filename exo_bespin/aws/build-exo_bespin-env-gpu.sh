@@ -14,14 +14,14 @@ sudo dracut /boot/initramfs-$(uname -r).img $(uname -r)
 sudo reboot
 sudo systemctl isolate multi-user.target
 wget http://us.download.nvidia.com/XFree86/Linux-x86_64/430.40/NVIDIA-Linux-x86_64-430.40.run
-sudo sh NVIDIA-Linux-x86_64-430.40.run
+sudo sh NVIDIA-Linux-x86_64-430.40.run  # Select "No" when prompted to install 32-bit materials
 sudo reboot
 
 echo ''
 echo '~~~~~ INSTALLING CUDA TOOLKIT ~~~~~'
 echo ''
 wget http://developer.download.nvidia.com/compute/cuda/10.1/Prod/local_installers/cuda_10.1.243_418.87.00_linux.run
-sudo sh cuda_10.1.243_418.87.00_linux.run
+sudo sh cuda_10.1.243_418.87.00_linux.run  # Enter "accept" and then choose "install", keeping everything selected
 export PATH=$PATH:/usr/local/cuda-10.1/bin
 export LD_LIBRARY_PATH=/usr/local/cuda-10.1/lib64
 

@@ -1,4 +1,6 @@
 {
-    "ec2_id" : "i-0c1092954faa73726",
-    "ssh_file" : "/Users/bourque/.ssh/aws_bourque_exo_bespin"
+    "ec2_id" : "",
+    "key_pair_name": "",
+    "security_group_id": "",
+    "ssh_file" : ""
 }

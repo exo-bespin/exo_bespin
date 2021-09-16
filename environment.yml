@@ -2,7 +2,7 @@ name: exo-bespin
 channels:
   - defaults
 dependencies:
-  - boto3=1.9.66
+  - boto3
   - cython=0.29.24
   - django=2.2.5
   - flake8=3.8.4
