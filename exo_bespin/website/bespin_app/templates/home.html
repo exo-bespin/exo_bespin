@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <main role="main" class="container">
+    	<h2>Welcome to the ExoBespin Application!</h2>
+
+        <form method="post" class="form-group">
+
+            <!--Django Cross-Site Request Forgery magic-->
+            {{ csrf_input }}
+
+            {% for field in form %}
+
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">{{ field.label }}</label>{{ field }}
+                </div>
+
+            {% endfor %}
+
+            <button name="submit" type="submit" class="btn btn-success">Submit</button>
+
+        </form>
+
+    </main>
+
+{% endblock %}
