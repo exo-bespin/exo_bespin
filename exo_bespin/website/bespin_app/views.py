@@ -69,8 +69,6 @@ def _process_request(form):
     # Run the code on EC2
     command = './exo_bespin/exo_bespin/aws/exo_bespin-env-init.sh python exo_bespin/run_fit.py'
     output, errors = aws_tools.run_command(command, instance, key, client)
-    for line in output:
-        print(line)
 
     # Get the results back
     aws_tools.transfer_from_ec2(instance, key, client, 'results/lc.dat')
@@ -79,9 +77,15 @@ def _process_request(form):
     aws_tools.stop_ec2(ec2_id, instance)
 
     # Parse the results
+    # posteriors file
     with open('lc.dat', 'r') as f:
         data = f.readlines()
-    results = {'data' : data}
+    results = {
+        'data' : data,
+        'output': output
+    }
+
+    print(results)
 
     return results
 
