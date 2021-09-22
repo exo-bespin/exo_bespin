@@ -9,7 +9,7 @@ dependencies:
   - git=2.23.0
   - h5py
   - jupyter=1.0.0
-  - numpy=1.19.1
+  - numpy
   - paramiko=2.7.1
   - pip=20.1.1
   - pytest=6.1.1
