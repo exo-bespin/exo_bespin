@@ -22,4 +22,5 @@ dependencies:
     - bibtexparser==1.1.0
     - corner==2.1.0
     - platon==4.0
+    - radvel==1.4.6
     - git+https://github.com/nespinoza/juliet.git@dev
