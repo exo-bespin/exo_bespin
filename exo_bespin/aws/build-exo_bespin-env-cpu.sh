@@ -42,9 +42,7 @@ pip install -U numpy
 echo ''
 echo '~~~~~ INSTALLING juliet ~~~~~'
 echo ''
-git clone -b dev https://github.com/nespinoza/juliet.git
-cd juliet
-python setup.py develop
+pip install juliet
 cd ../
 
 echo ''

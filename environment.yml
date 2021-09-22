@@ -9,7 +9,7 @@ dependencies:
   - git=2.23.0
   - h5py
   - jupyter=1.0.0
-  - numpy
+  - numpy=1.19.1
   - paramiko=2.7.1
   - pip=20.1.1
   - pytest=6.1.1
@@ -22,4 +22,3 @@ dependencies:
     - bibtexparser==1.1.0
     - corner==2.1.0
     - platon==4.0
-    - radvel==1.4.6
