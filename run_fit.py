@@ -1,35 +1,49 @@
+#! /usr/bin/env python
+
+"""Create a lightcurve based on some user-provided parameters.
+
+This code expects three chunks of data read from the `~/params.json`
+file:
+
+    1. First, the location of a user-defined (i.e., user-uploaded)
+       ascii file, with times in the first column, fluxes in the second
+       and errors on the third --- user_params['filename']
+
+    2. Second, a set of definitions on the starting points, prior
+       distribution and prior hyperparameters of each of the parameters
+       to be fitted. The full list of parameters is defined below on
+       the "all_parameters" variable. For each of these, this code
+       expects to find:
+
+      a) A definition of the prior distribution of the parameter, e.g.,
+         user_params['P_p1_prior'] = 'normal'. Distribution can be
+         'fixed' for fixed parameters.
+
+      b) A starting value for the parameter, e.g.,
+         user_params['P_p1_starting_value'] = 1.
+
+      c) If the distribution is NOT `fixed`, two hyperparmeters
+         defining the prior, e.g.,
+         user_params['P_p1_starting_hyperparameter1'] = 1.,
+         user_params['P_p1_starting_hyperparameter2'] = 0.01. If the
+         distribution is `fixed`, adding those won't matter.
+
+    3. The third are parameters for the sampler, in this case emcee. In
+       particular, need to know the number of walkers, steps and burnin
+       steps, e.g., user_params['nwalkers'] = 100,
+       user_params['nsteps'] = 300, user_params['nburnin'] = 500.
+"""
+
 import json
 import os
 import random
 
+import juliet
 import matplotlib.pyplot as plt
 from matplotlib.gridspec import GridSpec
 import numpy as np
 
-import juliet
 random.seed(42)
-
-"""
-This code expects three chunks of data read from the `params.json` file:
-
-1. First, the location of a user-defined (i.e., user-uploaded) ascii file, with times in the first column, fluxes in the second and 
-   errors on the third --- user_params['filename']
-
-2. Second, a set of definitions on the starting points, prior distribution and prior hyperparameters of each of the parameters to be 
-   fitted. The full list of parameters is defined below on the "all_parameters" variable. For each of these, this code expects to find:
-
-   a) A definition of the prior distribution of the parameter, e.g., user_params['P_p1_prior'] = 'normal'. Distribution can be 'fixed' for 
-      fixed parameters.
-
-   b) A starting value for the parameter, e.g., user_params['P_p1_starting_value'] = 1.
-
-   c) If the distribution is NOT `fixed`, two hyperparmeters defining the prior, e.g., user_params['P_p1_starting_hyperparameter1'] = 1., 
-      user_params['P_p1_starting_hyperparameter2'] = 0.01. If the distribution is `fixed`, adding those won't matter.
-
-3. The third are parameters for the sampler, in this case emcee. In particular, need to know the number of walkers, steps and burnin steps, 
-   e.g., user_params['nwalkers'] = 100, user_params['nsteps'] = 300, user_params['nburnin'] = 500.
-
-"""
 
 with open(os.path.join(os.path.expanduser("~"), 'params.json'), 'r') as f:
     user_params = json.load(f)

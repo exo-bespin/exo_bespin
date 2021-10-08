@@ -2,6 +2,52 @@
 
 {% block content %}
 
+    <script type="text/javascript">
+
+        $(document).ready(function(){
+
+            const items_to_hide_1 = ["P_p1", "ecc_p1", "omega_p1", "mdilution_inst"]; //Items with only starting value parameter
+            const items_to_hide_2 = ["t0_p1", "p_p1", "b_p1", "q1_inst", "q2_inst", "a_p1", "mflux_inst", "sigma_w_inst"]; //Items with hyperparameters
+
+            for (const item of items_to_hide_1) {
+
+                // Hide parameter by default
+                $(`#${item}_starting_value`).hide();
+
+                // Toggle on/off starting value upon selection of prior value
+                $(`#${item}_prior`).change(function () {
+                    if (document.getElementById(`${item}_prior`).value == 'normal'){
+                        $(`#${item}_starting_value`).hide();
+                    } else if (document.getElementById(`${item}_prior`).value == 'fixed'){
+                        $(`#${item}_starting_value`).show();
+                    };
+                });
+            };
+
+            for (const item of items_to_hide_2) {
+
+                // Hide parameters by default
+                $(`#${item}_starting_value`).hide();
+                $(`#${item}_hyperparameter1`).hide();
+                $(`#${item}_hyperparameter2`).hide();
+
+                // Toggle on/off starting value and hyperparameters upon selection of prior value
+                $(`#${item}_prior`).change(function () {
+                    if (document.getElementById(`${item}_prior`).value == 'normal'){
+                        $(`#${item}_starting_value`).hide();
+                        $(`#${item}_hyperparameter1`).hide();
+                        $(`#${item}_hyperparameter2`).hide();
+                    } else if (document.getElementById(`${item}_prior`).value == 'fixed'){
+                        $(`#${item}_starting_value`).show();
+                        $(`#${item}_hyperparameter1`).show();
+                        $(`#${item}_hyperparameter2`).show();
+                    };
+                });
+            };
+        });
+
+    </script>
+
     <main role="main" class="container">
     	<h2>Welcome to the ExoBespin Application!</h2>
 
@@ -10,14 +56,121 @@
             <!--Django Cross-Site Request Forgery magic-->
             {{ csrf_input }}
 
-            {% for field in form %}
+            <!-- filename -->
+            <br>
+            <div class="form-group row">
+                <label id="field" class="col-sm-1 col-form-label">{{ form.filename.label }}</label>{{ form.filename }}
+            </div>
 
-                <div class="form-group row">
-                    <label class="col-sm-2 col-form-label">{{ field.label }}</label>{{ field }}
-                </div>
+            <!-- P_p1 -->
+            <br>
+            <div class="form-group row">
+                <div class="col-md-3"><label id="field" class="col-form-label">{{ form.P_p1_prior.label }}</label>&nbsp;&nbsp;{{ form.P_p1_prior }}</div>
+                <div class="col-md-3" id="P_p1_starting_value"><label id="field" class="col-form-label">{{ form.P_p1_starting_value.label }}</label>&nbsp;&nbsp;{{ form.P_p1_starting_value }}</div>
+            </div>
 
-            {% endfor %}
+            <!-- t0_p1 -->
+            <br>
+            <div class="form-group row">
+                <div class="col-md-3"><label id="field" class="col-form-label">{{ form.t0_p1_prior.label }}</label>&nbsp;&nbsp;{{ form.t0_p1_prior }}</div>
+                <div class="col-md-3" id="t0_p1_starting_value"><label id="field" class="col-form-label">{{ form.t0_p1_starting_value.label }}</label>&nbsp;&nbsp;{{ form.t0_p1_starting_value }}</div>
+                <div class="col-md-3" id="t0_p1_hyperparameter1"><label id="field" class="col-form-label">{{ form.t0_p1_hyperparameter1.label }}</label>&nbsp;&nbsp;{{ form.t0_p1_hyperparameter1 }}</div>
+                <div class="col-md-3" id="t0_p1_hyperparameter2"><label id="field" class="col-form-label">{{ form.t0_p1_hyperparameter2.label }}</label>&nbsp;&nbsp;{{ form.t0_p1_hyperparameter2 }}</div>
+            </div>
 
+            <!-- p_p1 -->
+            <br>
+            <div class="form-group row">
+                <div class="col-md-3"><label id="field" class="col-form-label">{{ form.p_p1_prior.label }}</label>&nbsp;&nbsp;{{ form.p_p1_prior }}</div>
+                <div class="col-md-3" id="p_p1_starting_value"><label id="field" class="col-form-label">{{ form.p_p1_starting_value.label }}</label>&nbsp;&nbsp;{{ form.p_p1_starting_value }}</div>
+                <div class="col-md-3" id="p_p1_hyperparameter1"><label id="field" class="col-form-label">{{ form.p_p1_hyperparameter1.label }}</label>&nbsp;&nbsp;{{ form.p_p1_hyperparameter1 }}</div>
+                <div class="col-md-3" id="p_p1_hyperparameter2"><label id="field" class="col-form-label">{{ form.p_p1_hyperparameter2.label }}</label>&nbsp;&nbsp;{{ form.p_p1_hyperparameter2 }}</div>
+            </div>
+
+            <!-- b_p1 -->
+            <br>
+            <div class="form-group row">
+                <div class="col-md-3"><label id="field" class="col-form-label">{{ form.b_p1_prior.label }}</label>&nbsp;&nbsp;{{ form.b_p1_prior }}</div>
+                <div class="col-md-3" id="b_p1_starting_value"><label id="field" class="col-form-label">{{ form.b_p1_starting_value.label }}</label>&nbsp;&nbsp;{{ form.b_p1_starting_value }}</div>
+                <div class="col-md-3" id="b_p1_hyperparameter1"><label id="field" class="col-form-label">{{ form.b_p1_hyperparameter1.label }}</label>&nbsp;&nbsp;{{ form.b_p1_hyperparameter1 }}</div>
+                <div class="col-md-3" id="b_p1_hyperparameter2"><label id="field" class="col-form-label">{{ form.b_p1_hyperparameter2.label }}</label>&nbsp;&nbsp;{{ form.b_p1_hyperparameter2 }}</div>
+            </div>
+
+            <!-- q1_inst -->
+            <br>
+            <div class="form-group row">
+                <div class="col-md-3"><label id="field" class="col-form-label">{{ form.q1_inst_prior.label }}</label>&nbsp;&nbsp;{{ form.q1_inst_prior }}</div>
+                <div class="col-md-3" id="q1_inst_starting_value"><label id="field" class="col-form-label">{{ form.q1_inst_starting_value.label }}</label>&nbsp;&nbsp;{{ form.q1_inst_starting_value }}</div>
+                <div class="col-md-3" id="q1_inst_hyperparameter1"><label id="field" class="col-form-label">{{ form.q1_inst_hyperparameter1.label }}</label>&nbsp;&nbsp;{{ form.q1_inst_hyperparameter1 }}</div>
+                <div class="col-md-3" id="q1_inst_hyperparameter2"><label id="field" class="col-form-label">{{ form.q1_inst_hyperparameter2.label }}</label>&nbsp;&nbsp;{{ form.q1_inst_hyperparameter2 }}</div>
+            </div>
+
+            <!-- q2_inst -->
+            <br>
+            <div class="form-group row">
+                <div class="col-md-3"><label id="field" class="col-form-label">{{ form.q2_inst_prior.label }}</label>&nbsp;&nbsp;{{ form.q2_inst_prior }}</div>
+                <div class="col-md-3" id="q2_inst_starting_value"><label id="field" class="col-form-label">{{ form.q2_inst_starting_value.label }}</label>&nbsp;&nbsp;{{ form.q2_inst_starting_value }}</div>
+                <div class="col-md-3" id="q2_inst_hyperparameter1"><label id="field" class="col-form-label">{{ form.q2_inst_hyperparameter1.label }}</label>&nbsp;&nbsp;{{ form.q2_inst_hyperparameter1 }}</div>
+                <div class="col-md-3" id="q2_inst_hyperparameter2"><label id="field" class="col-form-label">{{ form.q2_inst_hyperparameter2.label }}</label>&nbsp;&nbsp;{{ form.q2_inst_hyperparameter2 }}</div>
+            </div>
+
+            <!-- ecc_p1 -->
+            <br>
+            <div class="form-group row">
+                <div class="col-md-3"><label id="field" class="col-form-label">{{ form.ecc_p1_prior.label }}</label>&nbsp;&nbsp;{{ form.ecc_p1_prior }}</div>
+                <div class="col-md-3" id="ecc_p1_starting_value"><label id="field" class="col-form-label">{{ form.ecc_p1_starting_value.label }}</label>&nbsp;&nbsp;{{ form.ecc_p1_starting_value }}</div>
+            </div>
+
+            <!-- omega_p1 -->
+            <br>
+            <div class="form-group row">
+                <div class="col-md-3"><label id="field" class="col-form-label">{{ form.omega_p1_prior.label }}</label>&nbsp;&nbsp;{{ form.omega_p1_prior }}</div>
+                <div class="col-md-3" id="omega_p1_starting_value"><label id="field" class="col-form-label">{{ form.omega_p1_starting_value.label }}</label>&nbsp;&nbsp;{{ form.omega_p1_starting_value }}</div>
+            </div>
+
+            <!-- a_p1 -->
+            <br>
+            <div class="form-group row">
+                <div class="col-md-3"><label id="field" class="col-form-label">{{ form.a_p1_prior.label }}</label>&nbsp;&nbsp;{{ form.a_p1_prior }}</div>
+                <div class="col-md-3" id="a_p1_starting_value"><label id="field" class="col-form-label">{{ form.a_p1_starting_value.label }}</label>&nbsp;&nbsp;{{ form.a_p1_starting_value }}</div>
+                <div class="col-md-3" id="a_p1_hyperparameter1"><label id="field" class="col-form-label">{{ form.a_p1_hyperparameter1.label }}</label>&nbsp;&nbsp;{{ form.a_p1_hyperparameter1 }}</div>
+                <div class="col-md-3" id="a_p1_hyperparameter2"><label id="field" class="col-form-label">{{ form.a_p1_hyperparameter2.label }}</label>&nbsp;&nbsp;{{ form.a_p1_hyperparameter2 }}</div>
+            </div>
+
+            <!-- mdilution_inst -->
+            <br>
+            <div class="form-group row">
+                <div class="col-md-3"><label id="field" class="col-form-label">{{ form.mdilution_inst_prior.label }}</label>&nbsp;&nbsp;{{ form.mdilution_inst_prior }}</div>
+                <div class="col-md-3" id="mdilution_inst_starting_value"><label id="field" class="col-form-label">{{ form.mdilution_inst_starting_value.label }}</label>&nbsp;&nbsp;{{ form.mdilution_inst_starting_value }}</div>
+            </div>
+
+            <!-- mflux_inst -->
+            <br>
+            <div class="form-group row">
+                <div class="col-md-3"><label id="field" class="col-form-label">{{ form.mflux_inst_prior.label }}</label>&nbsp;&nbsp;{{ form.mflux_inst_prior }}</div>
+                <div class="col-md-3" id="mflux_inst_starting_value"><label id="field" class="col-form-label">{{ form.mflux_inst_starting_value.label }}</label>&nbsp;&nbsp;{{ form.mflux_inst_starting_value }}</div>
+                <div class="col-md-3" id="mflux_inst_hyperparameter1"><label id="field" class="col-form-label">{{ form.mflux_inst_hyperparameter1.label }}</label>&nbsp;&nbsp;{{ form.mflux_inst_hyperparameter1 }}</div>
+                <div class="col-md-3" id="mflux_inst_hyperparameter2"><label id="field" class="col-form-label">{{ form.mflux_inst_hyperparameter2.label }}</label>&nbsp;&nbsp;{{ form.mflux_inst_hyperparameter2 }}</div>
+            </div>
+
+            <!-- sigma_w_inst -->
+            <br>
+            <div class="form-group row">
+                <div class="col-md-3"><label id="field" class="col-form-label">{{ form.sigma_w_inst_prior.label }}</label>&nbsp;&nbsp;{{ form.sigma_w_inst_prior }}</div>
+                <div class="col-md-3" id="sigma_w_inst_starting_value"><label id="field" class="col-form-label">{{ form.sigma_w_inst_starting_value.label }}</label>&nbsp;&nbsp;{{ form.sigma_w_inst_starting_value }}</div>
+                <div class="col-md-3" id="sigma_w_inst_hyperparameter1"><label id="field" class="col-form-label">{{ form.sigma_w_inst_hyperparameter1.label }}</label>&nbsp;&nbsp;{{ form.sigma_w_inst_hyperparameter1 }}</div>
+                <div class="col-md-3" id="sigma_w_inst_hyperparameter2"><label id="field" class="col-form-label">{{ form.sigma_w_inst_hyperparameter2.label }}</label>&nbsp;&nbsp;{{ form.sigma_w_inst_hyperparameter2 }}</div>
+            </div>
+
+            <!-- nwalkers/nsteps/nburnin -->
+            <br>
+            <div class="form-group row">
+                <div class="col-md-4"><label id="field" class="col-form-label">{{ form.nwalkers.label }}</label>&nbsp;&nbsp;{{ form.nwalkers }}</div>
+                <div class="col-md-4"><label id="field" class="col-form-label">{{ form.nsteps.label }}</label>&nbsp;&nbsp;{{ form.nsteps }}</div>
+                <div class="col-md-4"><label id="field" class="col-form-label">{{ form.nburnin.label }}</label>&nbsp;&nbsp;{{ form.nburnin }}</div>
+            </div>
+
+            <br><br>
             <button name="submit" type="submit" class="btn btn-success">Submit</button>
 
         </form>

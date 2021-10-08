@@ -42,7 +42,7 @@ from django.http import HttpRequest as request
 from django.shortcuts import render
 
 from exo_bespin.aws import aws_tools
-from exo_bespin.website.bespin_app.form_validation import ExampleForm
+from exo_bespin.website.bespin_app.form_validation import LightcurveForm
 
 
 def _process_request(form):
@@ -53,37 +53,39 @@ def _process_request(form):
     params = form.get_cleaned_data()
     params_file = os.path.join(os.path.expanduser("~"), 'params.json')
     with open(params_file, 'w') as f:
-        json.dump(params, f)
+        json.dump(params, f, indent=2)
 
-    # Get info from config file
-    ssh_file = aws_tools.get_config()['ssh_file']
-    ec2_id = aws_tools.get_config()['ec2_id']
+    # # Get info from config file
+    # ssh_file = aws_tools.get_config()['ssh_file']
+    # ec2_id = aws_tools.get_config()['ec2_id']
 
-    # Boot up the EC2 instance
-    instance, key, client = aws_tools.start_ec2(ssh_file, ec2_id)
-    aws_tools.wait_for_instance(instance, key, client)
+    # # Boot up the EC2 instance
+    # instance, key, client = aws_tools.start_ec2(ssh_file, ec2_id)
+    # aws_tools.wait_for_instance(instance, key, client)
 
-    # Transfer the parameter file to EC2
-    aws_tools.transfer_to_ec2(instance, key, client, params_file)
+    # # Transfer the parameter file to EC2
+    # aws_tools.transfer_to_ec2(instance, key, client, params_file)
 
-    # Run the code on EC2
-    command = './exo_bespin/exo_bespin/aws/exo_bespin-env-init.sh python exo_bespin/run_fit.py'
-    output, errors = aws_tools.run_command(command, instance, key, client)
+    # # Run the code on EC2
+    # command = './exo_bespin/exo_bespin/aws/exo_bespin-env-init.sh python exo_bespin/run_fit.py'
+    # output, errors = aws_tools.run_command(command, instance, key, client)
 
-    # Get the results back
-    aws_tools.transfer_from_ec2(instance, key, client, 'results/lc.dat')
+    # # Get the results back
+    # aws_tools.transfer_from_ec2(instance, key, client, 'results/lc.dat')
 
-    # Stop the EC2 instance
-    aws_tools.stop_ec2(ec2_id, instance)
+    # # Stop the EC2 instance
+    # aws_tools.stop_ec2(ec2_id, instance)
 
-    # Parse the results
-    # posteriors file
-    with open('lc.dat', 'r') as f:
-        data = f.readlines()
-    results = {
-        'data' : data,
-        'output': output
-    }
+    # # Parse the results
+    # # posteriors file
+    # with open('lc.dat', 'r') as f:
+    #     data = f.readlines()
+    # results = {
+    #     'data' : data,
+    #     'output': output
+    # }
+
+    results = params
 
     print(results)
 
@@ -105,13 +107,13 @@ def home(request):
     """
 
     if request.method == 'GET':
-        form = ExampleForm()
+        form = LightcurveForm()
         template = 'home.html'
         context = {'form': form}
         return render(request, template, context)
 
     elif request.method == 'POST':
-        form = ExampleForm(request.POST)
+        form = LightcurveForm(request.POST)
         if form.is_valid():
             results = _process_request(form)
             context = {'results': results}
