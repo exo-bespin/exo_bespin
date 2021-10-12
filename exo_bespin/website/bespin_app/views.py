@@ -31,13 +31,12 @@ Dependencies
 ------------
 
     - ``django``
-
 """
 
 import json
 import os
+import shutil
 
-from django.http import HttpResponse, HttpResponseRedirect
 from django.http import HttpRequest as request
 from django.shortcuts import render
 
@@ -45,51 +44,57 @@ from exo_bespin.aws import aws_tools
 from exo_bespin.website.bespin_app.form_validation import LightcurveForm
 
 
-def _process_request(form):
-    """
+def _process_request(form, user_uploaded_file):
+    """Gather parameters given by the user, run the fit, and move the
+    results to be rendered by the web app.
+
+    Parameters
+    ----------
+    form : ``django.form.Forms`` object
+        The form that contains user-provided parameters
+    user_uploaded_file : `InMemoryUploadedFile`
+        The user-provided file that contains lightcurve data
     """
 
     # Get the parameters from the form and save them to a json file
     params = form.get_cleaned_data()
+    del params['filename']
     params_file = os.path.join(os.path.expanduser("~"), 'params.json')
     with open(params_file, 'w') as f:
         json.dump(params, f, indent=2)
 
-    # # Get info from config file
-    # ssh_file = aws_tools.get_config()['ssh_file']
-    # ec2_id = aws_tools.get_config()['ec2_id']
+    # Save a copy of the user-uploaded file
+    lightcurve_data_file = os.path.join(os.path.expanduser("~"), 'lightcurve.dat')
+    with open(lightcurve_data_file, 'wb+') as destination:
+        for chunk in user_uploaded_file.chunks():
+            destination.write(chunk)
 
-    # # Boot up the EC2 instance
-    # instance, key, client = aws_tools.start_ec2(ssh_file, ec2_id)
-    # aws_tools.wait_for_instance(instance, key, client)
+    # Get info from config file
+    ssh_file = aws_tools.get_config()['ssh_file']
+    ec2_id = aws_tools.get_config()['ec2_id']
 
-    # # Transfer the parameter file to EC2
-    # aws_tools.transfer_to_ec2(instance, key, client, params_file)
+    # Boot up the EC2 instance
+    instance, key, client = aws_tools.start_ec2(ssh_file, ec2_id)
+    aws_tools.wait_for_instance(instance, key, client)
 
-    # # Run the code on EC2
-    # command = './exo_bespin/exo_bespin/aws/exo_bespin-env-init.sh python exo_bespin/run_fit.py'
-    # output, errors = aws_tools.run_command(command, instance, key, client)
+    # Transfer the parameter and lightcurve data files to EC2
+    aws_tools.transfer_to_ec2(instance, key, client, params_file)
+    aws_tools.transfer_to_ec2(instance, key, client, lightcurve_data_file)
 
-    # # Get the results back
-    # aws_tools.transfer_from_ec2(instance, key, client, 'results/lc.dat')
+    # Run the code on EC2
+    command = './exo_bespin/exo_bespin/aws/exo_bespin-env-init.sh python exo_bespin/run_fit.py'
+    output, errors = aws_tools.run_command(command, instance, key, client)
 
-    # # Stop the EC2 instance
-    # aws_tools.stop_ec2(ec2_id, instance)
+    # Get the results back
+    aws_tools.transfer_from_ec2(instance, key, client, 'transit_fit.png')
+    aws_tools.transfer_from_ec2(instance, key, client, 'corner_plot.png')
 
-    # # Parse the results
-    # # posteriors file
-    # with open('lc.dat', 'r') as f:
-    #     data = f.readlines()
-    # results = {
-    #     'data' : data,
-    #     'output': output
-    # }
+    # Stop the EC2 instance
+    aws_tools.stop_ec2(ec2_id, instance)
 
-    results = params
-
-    print(results)
-
-    return results
+    # Move the results to within the application
+    shutil.move('transit_fit.png', 'bespin_app/static/img/transit_fit.png')
+    shutil.move('corner_plot.png', 'bespin_app/static/img/corner_plot.png')
 
 
 def home(request):
@@ -113,9 +118,12 @@ def home(request):
         return render(request, template, context)
 
     elif request.method == 'POST':
-        form = LightcurveForm(request.POST)
+        form = LightcurveForm(request.POST, request.FILES)
+        print(request.FILES)
         if form.is_valid():
-            results = _process_request(form)
+            user_uploaded_file = request.FILES['filename']
+            print(user_uploaded_file)
+            results = _process_request(form, user_uploaded_file)
             context = {'results': results}
             return render(request, 'results.html', context)
         else:

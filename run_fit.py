@@ -38,6 +38,7 @@ import json
 import os
 import random
 
+import corner
 import juliet
 import matplotlib.pyplot as plt
 from matplotlib.gridspec import GridSpec
@@ -45,11 +46,12 @@ import numpy as np
 
 random.seed(42)
 
+# Read in user-provided paramater file
 with open(os.path.join(os.path.expanduser("~"), 'params.json'), 'r') as f:
     user_params = json.load(f)
 
 # First, read-in lightcuve data into numpy arrays:
-t, f, ferr = np.loadtxt(user_params['filename'], unpack = True, usecols = (0, 1, 2))
+t, f, ferr = np.loadtxt(os.path.join(os.path.expanduser("~"), 'lightcurve.dat'), unpack = True, usecols = (0, 1, 2))
 
 # Save those arrays into dictionaries, which is what juliet likes:
 times, fluxes, errors = {}, {}, {}

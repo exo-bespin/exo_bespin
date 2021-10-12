@@ -21,25 +21,26 @@ Dependencies
     - ``django``
 """
 
-import os
-
 from django import forms
 
 
 class LightcurveForm(forms.Form):
     """Form for user to enter parameters for lightcurve fitting"""
 
-    filename = forms.CharField(
-        label='filename',
-        required=True,
-        widget=forms.Textarea(attrs={
-            'rows':1,
-            'cols':60,
-            'style':'resize:none;',
-            'placeholder': 'e.g. /path/to/params.json'}))
+    # filename = forms.CharField(
+    #     label='filename',
+    #     required=True,
+    #     widget=forms.Textarea(attrs={
+    #         'rows':1,
+    #         'cols':60,
+    #         'style':'resize:none;',
+    #         'placeholder': 'e.g. /path/to/params.json'}))
+
 
     P_p1_prior = forms.ChoiceField(label='P_p1_prior', choices=[('normal', 'normal'), ('fixed', 'fixed')], required=True)
     P_p1_starting_value = forms.FloatField(label='P_p1_starting_value', min_value=0.0, required=False)
+    P_p1_hyperparameter1 = forms.FloatField(label='P_p1_hpyerparameter1', min_value=0.0, required=False)
+    P_p1_hyperparameter2 = forms.FloatField(label='P_p1_hpyerparameter2', min_value=0.0, required=False)
 
     t0_p1_prior = forms.ChoiceField(label='t0_p1_prior', choices=[('normal', 'normal'), ('fixed', 'fixed')], required=True)
     t0_p1_starting_value = forms.FloatField(label='t0_p1_starting_value', min_value=0.0, required=False)
@@ -94,6 +95,8 @@ class LightcurveForm(forms.Form):
     nsteps = forms.IntegerField(label='nsteps', min_value=0, required=True)
     nburnin = forms.IntegerField(label='nburnin', min_value=0, required=True)
 
+    filename = forms.FileField()
+
     # Prior parameters need their own ID so their corresponding fields can be shown/hidden
     P_p1_prior.widget.attrs = {'id': 'P_p1_prior'}
     t0_p1_prior.widget.attrs = {'id': 't0_p1_prior'}
@@ -107,22 +110,6 @@ class LightcurveForm(forms.Form):
     mdilution_inst_prior.widget.attrs = {'id': 'mdilution_inst_prior'}
     mflux_inst_prior.widget.attrs = {'id': 'mflux_inst_prior'}
     sigma_w_inst_prior.widget.attrs = {'id': 'sigma_w_inst_prior'}
-
-
-    def clean_filename(self):
-        """Make sure that the filename exists and is accessible"""
-
-        filename = self.cleaned_data['filename']
-
-        # Ensure the filename exists
-        if not os.path.exists(filename):
-            raise forms.ValidationError("Provided filename does not exist")
-
-        # Ensure the filename is readable
-        if not os.access(filename, os.R_OK):
-            raise forms.ValidrationError("Provided filename is not readable")
-
-        return filename
 
     def get_cleaned_data(self):
         """Return the cleaned data"""

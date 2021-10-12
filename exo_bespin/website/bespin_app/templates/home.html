@@ -6,8 +6,8 @@
 
         $(document).ready(function(){
 
-            const items_to_hide_1 = ["P_p1", "ecc_p1", "omega_p1", "mdilution_inst"]; //Items with only starting value parameter
-            const items_to_hide_2 = ["t0_p1", "p_p1", "b_p1", "q1_inst", "q2_inst", "a_p1", "mflux_inst", "sigma_w_inst"]; //Items with hyperparameters
+            const items_to_hide_1 = ["ecc_p1", "omega_p1", "mdilution_inst"]; //Items with only starting value parameter
+            const items_to_hide_2 = ["P_p1", "t0_p1", "p_p1", "b_p1", "q1_inst", "q2_inst", "a_p1", "mflux_inst", "sigma_w_inst"]; //Items with hyperparameters
 
             for (const item of items_to_hide_1) {
 
@@ -51,22 +51,18 @@
     <main role="main" class="container">
     	<h2>Welcome to the ExoBespin Application!</h2>
 
-        <form method="post" class="form-group">
+        <form method="post" class="form-group" enctype="multipart/form-data">
 
             <!--Django Cross-Site Request Forgery magic-->
             {{ csrf_input }}
-
-            <!-- filename -->
-            <br>
-            <div class="form-group row">
-                <label id="field" class="col-sm-1 col-form-label">{{ form.filename.label }}</label>{{ form.filename }}
-            </div>
 
             <!-- P_p1 -->
             <br>
             <div class="form-group row">
                 <div class="col-md-3"><label id="field" class="col-form-label">{{ form.P_p1_prior.label }}</label>&nbsp;&nbsp;{{ form.P_p1_prior }}</div>
                 <div class="col-md-3" id="P_p1_starting_value"><label id="field" class="col-form-label">{{ form.P_p1_starting_value.label }}</label>&nbsp;&nbsp;{{ form.P_p1_starting_value }}</div>
+                <div class="col-md-3" id="P_p1_hyperparameter1"><label id="field" class="col-form-label">{{ form.P_p1_hyperparameter1.label }}</label>&nbsp;&nbsp;{{ form.P_p1_hyperparameter1 }}</div>
+                <div class="col-md-3" id="P_p1_hyperparameter2"><label id="field" class="col-form-label">{{ form.P_p1_hyperparameter2.label }}</label>&nbsp;&nbsp;{{ form.P_p1_hyperparameter2 }}</div>
             </div>
 
             <!-- t0_p1 -->
@@ -168,6 +164,12 @@
                 <div class="col-md-4"><label id="field" class="col-form-label">{{ form.nwalkers.label }}</label>&nbsp;&nbsp;{{ form.nwalkers }}</div>
                 <div class="col-md-4"><label id="field" class="col-form-label">{{ form.nsteps.label }}</label>&nbsp;&nbsp;{{ form.nsteps }}</div>
                 <div class="col-md-4"><label id="field" class="col-form-label">{{ form.nburnin.label }}</label>&nbsp;&nbsp;{{ form.nburnin }}</div>
+            </div>
+
+            <!-- filename -->
+            <br>
+            <div class="form-group row">
+                <label id="field" class="col-sm-1 col-form-label">{{ form.filename.label }}</label>{{ form.filename }}
             </div>
 
             <br><br>
